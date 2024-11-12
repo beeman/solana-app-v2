@@ -1,4 +1,5 @@
 import { Toaster } from '@/components/ui/toaster.tsx'
+import { TooltipProvider } from '@/components/ui/tooltip.tsx'
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 
 type Theme = 'dark' | 'light' | 'system'
@@ -68,7 +69,7 @@ export function AppThemeProvider({
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
-      {children}
+      <TooltipProvider>{children}</TooltipProvider>
       <Toaster />
     </ThemeProviderContext.Provider>
   )

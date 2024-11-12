@@ -1,14 +1,25 @@
+import { AccountChecker } from '@/components/account/account-ui.tsx'
 import { AppThemeSwitch } from '@/components/app-theme-toggle.tsx'
+import { ClusterChecker, ClusterUiSelect } from '@/components/cluster/cluster-ui.tsx'
+import { ConnectWalletMenu } from '@/components/solana/ui/connect-wallet-menu.tsx'
+import { Button } from '@/components/ui/button.tsx'
 import { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { AppThemeProvider } from './app-theme-provider.tsx'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from './ui/dialog.tsx'
 
 export function AppLayout({ children, links }: { children: ReactNode; links: { label: string; path: string }[] }) {
   return (
     <AppThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <div className="flex flex-col min-h-screen">
         <AppHeader links={links} />
-        <main className="flex-grow container mx-auto p-4">{children}</main>
+        <main className="flex-grow container mx-auto p-4">
+          <ClusterChecker>
+            <AccountChecker />
+          </ClusterChecker>
+
+          {children}
+        </main>
         <AppFooter />
       </div>
     </AppThemeProvider>
@@ -25,7 +36,6 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
           <Link className="text-xl hover:text-gray-500 dark:hover:text-white" to="/">
             <span>Placeholder</span>
           </Link>
-
           <ul className="flex gap-2 flex-nowrap">
             {links.map(({ label, path }) => (
               <li key={path}>
@@ -36,7 +46,9 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
             ))}
           </ul>
         </div>
-        <div>
+        <div className="flex items-center gap-4">
+          <ConnectWalletMenu>Connect Wallet</ConnectWalletMenu>
+          <ClusterUiSelect />
           <AppThemeSwitch />
         </div>
       </div>
@@ -66,8 +78,8 @@ export function AppHero({
   subtitle,
 }: {
   children?: ReactNode
-  title: ReactNode
-  subtitle: ReactNode
+  title?: ReactNode
+  subtitle?: ReactNode
 }) {
   return (
     <div className="flex flex-row justify-center py-[64px]">
@@ -80,4 +92,54 @@ export function AppHero({
       </div>
     </div>
   )
+}
+
+export function AppModal({
+  children,
+  title,
+  description,
+  onOpenChange,
+  open,
+  submit,
+  submitDisabled,
+  submitLabel,
+}: {
+  children: ReactNode
+  title: string
+  description: string
+  onOpenChange: (open: boolean) => void
+  open: boolean
+  submit?: () => void
+  submitDisabled?: boolean
+  submitLabel?: string
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>
+        <Button>{title}</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogTitle>{title}</DialogTitle>
+        <DialogDescription>{description}</DialogDescription>
+        {children}
+        <DialogFooter>
+          {submit ? (
+            <Button variant="default" onClick={submit} disabled={submitDisabled}>
+              {submitLabel || 'Save'}
+            </Button>
+          ) : null}
+          <Button variant="secondary" onClick={() => onOpenChange(false)}>
+            Close
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+export function ellipsify(str = '', len = 4) {
+  if (str.length > 30) {
+    return str.substring(0, len) + '..' + str.substring(str.length - len, str.length)
+  }
+  return str
 }
