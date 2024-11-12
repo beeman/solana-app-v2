@@ -60,7 +60,6 @@ export function useGetTokenAccounts({ address }: { address: Address }) {
 
 export function useTransferSol({ address }: { address: Address }) {
   const { cluster } = useCluster()
-  const { rpc } = useSolanaRpc()
 
   // const transactionToast = useTransactionToast()
   // const wallet = useWallet()
@@ -69,6 +68,7 @@ export function useTransferSol({ address }: { address: Address }) {
   return useMutation({
     mutationKey: ['transfer-sol', { cluster, address }],
     mutationFn: async (input: { destination: Address; amount: number }) => {
+      console.log('transfer sol', input)
       // let signature: TransactionSignature = ''
       // try {
       //   const { transaction, latestBlockhash } = await createTransaction({
@@ -110,7 +110,7 @@ export function useTransferSol({ address }: { address: Address }) {
     },
     onError: (error) => {
       // FIXME: Enable toast
-      console.log('FIXME: toast signature link', signature)
+      console.log(`FIXME: toast signature link: ${error}`)
       // toast.error(`Transaction failed! ${error}`)
     },
   })

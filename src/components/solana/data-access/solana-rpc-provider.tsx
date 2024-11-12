@@ -1,7 +1,7 @@
 import { useCluster } from '@/components/cluster/cluster-data-access.tsx'
 import { createSolanaRpc, createSolanaRpcSubscriptions } from '@solana/web3.js'
 import { ReactNode, useMemo } from 'react'
-import { SolanaRpcContext } from './solana-rpc-context.tsx'
+import { SolanaRpc, SolanaRpcContext } from './solana-rpc-context.tsx'
 
 type Props = Readonly<{
   children: ReactNode
@@ -14,7 +14,7 @@ export function SolanaRpcProvider({ children }: Props) {
     <SolanaRpcContext.Provider
       value={useMemo(
         () => ({
-          rpc: createSolanaRpc(cluster.endpoint),
+          rpc: createSolanaRpc(cluster.endpoint) as SolanaRpc,
           rpcSubscriptions: createSolanaRpcSubscriptions(cluster.endpointSubscriptions),
         }),
         [cluster.endpoint, cluster.endpointSubscriptions],

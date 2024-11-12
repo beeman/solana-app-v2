@@ -5,7 +5,7 @@ import { useDisconnect } from '@wallet-standard/react'
 import { LogOutIcon, TriangleAlertIcon } from 'lucide-react'
 import { ComponentProps, useState } from 'react'
 
-import { NO_ERROR } from '../../../app/src/errors.tsx'
+import { NO_ERROR } from '../../errors.tsx'
 
 type Props = Readonly<{
   wallet: UiWallet

@@ -8,7 +8,7 @@ import {
 import { Button } from '@/components/ui/button.tsx'
 import { useState } from 'react'
 
-import { getErrorMessage } from '../../../app/src/errors.tsx'
+import { getErrorMessage } from '../../errors.tsx'
 
 type Props = Readonly<{
   error: unknown
